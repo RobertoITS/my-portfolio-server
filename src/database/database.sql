@@ -17,7 +17,8 @@ create table teammates (
     name varchar(20) not null,
     profession varchar(20) not null,
     locate varchar(20) not null,
-	img_id varchar(50) not null
+	img_id varchar(50) not null,
+    last_name varchar(50) not null
 )
 
 create table message (
