@@ -15,14 +15,20 @@ const getAll = async(req = request, res = response) => {
     try {
         const connection = await connect
         const result = await connection.query('SELECT * FROM teammates')
+
         //! Sector para devolver la imagen! Ver como funciona en tiempo real!
-        result.forEach(element => { //* Recorremos la lista!
+        result.forEach( function(element, index) { //* Recorremos la lista!
             try {
                 if (element.img_id){
                     const imagePath = path.join(__dirname, '../uploads/images', 'teammates', element.img_id)
                     console.log(imagePath);
                     if(fs.existsSync(imagePath)){
-                        return res.sendFile(imagePath) //* Enviamos la imagen
+                        
+                        //Colocamos el path de la imagen
+                        result[index].img_id = imagePath //* Enviamos la imagen
+                    }
+                    else {
+                        result[index].img_id = null
                     }
                 }
             }
@@ -34,11 +40,13 @@ const getAll = async(req = request, res = response) => {
             }
         })
         //!
+        
         res.status(200).json({
             ok:true,
             result,
             msg: 'approved'
         })
+        return result
     }
     catch (e) {
         res.status(400).json({
@@ -195,7 +203,7 @@ const putOne = async(req = request, res = response) => {
 
     try {
         const connection = await connect
-        const result = await connection.query('UPDATE teammate SET ? WHERE id = ?', [teammate, id])
+        const result = await connection.query('UPDATE teammates SET ? WHERE id = ?', [teammate, id])
         res.status(200).json({
             ok:true,
             result,

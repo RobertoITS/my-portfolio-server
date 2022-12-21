@@ -18,7 +18,7 @@ const uploadFiles = (fileToUpload, extensions = ['jpg', 'jpeg', 'png', 'gif', 'b
         const extensionAndName = file.name.split('.') //* Get extension and file name (list)
         const extension = extensionAndName[extensionAndName.length - 1] //* Get extension only
         if(!extensions.includes(extension)) { //! Check that the extension is allowed
-            return reject({mgs: `Allowed extension: ${extensions}`});
+            return rejected({mgs: `Allowed extension: ${extensions}`});
         }
         const tempName = uuidv4() + '.' + extension //* Create a unique id for the file
         const uploadPath = path.join(__dirname, '../uploads/', pathLocation, tempName) //* File location
