@@ -5,10 +5,10 @@ const router = Router()
 
 //! CreateReadUpdateDelete petitions
 
-router.get('/', controllerMethods.getAll)
-router.get('/:last_name', controllerMethods.getOne)
-router.post('/', controllerMethods.postOne)
-router.delete('/:id', controllerMethods.deleteOne)
-router.put('/:id', controllerMethods.putOne)
+router.get('/teammates', controllerMethods.getAll)
+router.get('/teammates/:last_name', controllerMethods.getOne)
+router.post('/teammates', controllerMethods.postOne)
+router.delete('/teammates/:id', controllerMethods.deleteOne)
+router.put('/teammates/:id', controllerMethods.putOne)
 
 export default router

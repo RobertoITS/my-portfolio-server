@@ -1,9 +1,5 @@
 import { request, response } from "express";
 import { connect } from "../database/database";
-import { files } from "../helpers/uploader";
-const path = require('path')
-import { unlink } from 'node:fs/promises';
-const fs = require('fs') //* File system
 
 //! Get all the data
 /**
@@ -15,31 +11,6 @@ const getAll = async(req = request, res = response) => {
     try {
         const connection = await connect
         const result = await connection.query('SELECT * FROM teammates')
-
-        //! Sector para devolver la imagen! Ver como funciona en tiempo real!
-        result.forEach( function(element, index) { //* Recorremos la lista!
-            try {
-                if (element.img_id){
-                    const imagePath = path.join(__dirname, '../uploads/images', 'teammates', element.img_id)
-                    console.log(imagePath);
-                    if(fs.existsSync(imagePath)){
-                        
-                        //Colocamos el path de la imagen
-                        result[index].img_id = imagePath //* Enviamos la imagen
-                    }
-                    else {
-                        result[index].img_id = null
-                    }
-                }
-            }
-            catch (error) {
-                res.status(500).json({
-                    ok:false,
-                    msg:error.msg
-                })
-            }
-        })
-        //!
         
         res.status(200).json({
             ok:true,
@@ -92,16 +63,6 @@ const getOne = async(req =request, res = response) => {
  * * In the form, insert an default image!
  */
 const postOne = async (req = request, res = response) => { //! The reference key is "file"
-    const data = req.body
-    console.log(data);
-    //* First we getAll the image name, and upload it at the server:
-    if(!req.files || Object.keys(req.files).length == 0 || !req.files.file) { //! If the file not exist
-        res.status(400).send(`Files weren't uploaded`)
-        return //** Return! */
-    }
-
-    //* Get the file name:
-    const img_id = await files.uploadFiles(req.files, undefined, 'images/teammates')
 
     //* Obtains other data from the body:
     const teammate = {
@@ -114,7 +75,7 @@ const postOne = async (req = request, res = response) => { //! The reference key
         name: req.body.name,
         profession: req.body.profession,
         locate: req.body.locate,
-        img_id: img_id,
+        img_id: '', //! Null value, send the image later (or not, depends of the user)
         last_name: req.body.last_name
     } //! Creates the object!
     
@@ -133,15 +94,6 @@ const postOne = async (req = request, res = response) => { //! The reference key
             e,
             msg:'rejected'
         })
-        const filePath = path.join(__dirname, '../uploads/images/teammates/', img_id)
-        console.log(dir);
-        try {
-            await unlink(filePath) //! Deletes the image
-            console.log('Image successfully deleted');
-        }
-        catch (e) {
-            console.log(`There was an error: ${e}`);
-        }
     }
 }
 
@@ -172,19 +124,10 @@ const deleteOne = async(req = request, res = response) => {
 
 //! Edit teammate info
 //* Lo mismo que para borrar, la lista trae un boton, que pasa los datos obtenidos al body
-
+//* Se añadio el eliminar la imagen vieja
 const putOne = async(req = request, res = response) => {
 
     const id = req.params.id
-
-    //* First we getAll the image name, and upload it at the server:
-    if(!req.files || Object.keys(req.files).length == 0 || !req.files.file) { //! If the file not exist
-        res.status(400).send(`Files weren't uploaded`)
-        return //** Return! */
-    }
-
-    //* Get the file name:
-    const img_id = await files.uploadFiles(req.files, undefined, 'images/teammates')
 
     //* Obtains other data from the body:
     const teammate = {
@@ -197,12 +140,13 @@ const putOne = async(req = request, res = response) => {
         name: req.body.name,
         profession: req.body.profession,
         locate: req.body.locate,
-        img_id: img_id,
+        img_id: '',
         last_name: req.body.last_name
     } //! Creates the object!
 
     try {
         const connection = await connect
+
         const result = await connection.query('UPDATE teammates SET ? WHERE id = ?', [teammate, id])
         res.status(200).json({
             ok:true,

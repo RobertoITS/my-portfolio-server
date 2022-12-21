@@ -5,6 +5,7 @@ var cors = require('cors');
 
 //*Routes
 import teammates from "./routes/teammates.routes"
+import upload from "./routes/upload.file.routes"
 
 //* Express
 const app = express();
@@ -29,6 +30,6 @@ app.use(fileUpload({
 }));
 
 //* Routes direction
-app.use( /* Routes */ teammates );
+app.use( /* Routes */ teammates, upload );
 
 export default app;

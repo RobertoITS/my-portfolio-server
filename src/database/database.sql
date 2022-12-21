@@ -53,5 +53,5 @@ insert into teammates(
         'Matías', 
         'Frontend developer', 
         'Gral. Roca', 
-        'matias_img'
+        ''
         )
