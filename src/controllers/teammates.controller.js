@@ -75,7 +75,7 @@ const postOne = async (req = request, res = response) => { //! The reference key
         name: req.body.name,
         profession: req.body.profession,
         locate: req.body.locate,
-        img_id: '', //! Null value, send the image later (or not, depends of the user)
+        //img_id: '', //! Null value, send the image later (or not, depends of the user)
         last_name: req.body.last_name
     } //! Creates the object!
     
@@ -140,7 +140,7 @@ const putOne = async(req = request, res = response) => {
         name: req.body.name,
         profession: req.body.profession,
         locate: req.body.locate,
-        img_id: '',
+        //img_id: '',
         last_name: req.body.last_name
     } //! Creates the object!
 

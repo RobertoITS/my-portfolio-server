@@ -31,11 +31,11 @@ const postFile = async(req = request, res = response) => { //! Reference key: "f
     try {
         const connection = await connect
         //* Update the user
-        const result = await connection.query('UPDATE ? SET ? WHERE id = ?', [table, record, id])
+        const result = await connection.query(`UPDATE ${table} SET ? WHERE id = ?`, [record, id])
         res.status(200).json({
             ok: true,
             result,
-            msg: 'aproved'
+            msg: 'approved'
         })
     }
     catch (err){
@@ -53,7 +53,8 @@ const putFile = async(req = request, res = response) => {
     const id = req.params.id //* Object's id
     const table = req.params.table //* Reference table
     const connection = await connect
-    const record = await connection.query(`SELECT id, img_id FROM ${table} WHERE id = ?`, id)
+    const record = await connection.query(`SELECT * FROM ${table} WHERE id = ?`, id)
+    console.log(record);
     if(record.length < 1) { //* Comprobamos que el usuario exista:
         return res.status(400).json({
             msg: 'No record available'
@@ -64,9 +65,9 @@ const putFile = async(req = request, res = response) => {
             if(img_id){ //* If exist
                 //* Generate the image path
                 const imagePath = path.join(__dirname, '../uploads/images', table, img_id)
-                console.log(imagePath);
                 if(fs.existsSync(imagePath)) { //* If exist
                     fs.unlinkSync(imagePath) //* Deleted
+                    console.log('deleted');
                 }
             }
         } catch (err){ /** Do nothing */ }
@@ -112,6 +113,7 @@ const getFile = async(req = request, res = response) => {
         }
     }
     res.json({ //* If no image foun:
+        ok:false,
         msg: 'Miss place holder'
     })
 
@@ -123,7 +125,7 @@ const deleteFile = async (req = request, res = response) => {
 
     const connection = await connect
 
-    const record = await connection.query('SELECT img_id FROM ? WHERE id = ?', [table, id])
+    const record = await connection.query(`SELECT img_id FROM ${table} WHERE id = ?`, id)
     const img_id = record[0].img_id //* Image's name
     try {
         if(img_id){ //* If exist
