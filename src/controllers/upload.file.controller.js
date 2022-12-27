@@ -126,6 +126,7 @@ const deleteFile = async (req = request, res = response) => {
     const connection = await connect
 
     const record = await connection.query(`SELECT img_id FROM ${table} WHERE id = ?`, id)
+    console.log(record);
     const img_id = record[0].img_id //* Image's name
     try {
         if(img_id){ //* If exist
@@ -134,7 +135,11 @@ const deleteFile = async (req = request, res = response) => {
             console.log(imagePath);
             if(fs.existsSync(imagePath)) { //* If exist
                 fs.unlinkSync(imagePath) //* Deleted
+                return
             }
+        }
+        else {
+            return
         }
     } catch (err){ /** Do nothing */ }
 }

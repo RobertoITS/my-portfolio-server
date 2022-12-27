@@ -18,7 +18,7 @@ router.post('/upload/:table/:id', [
 router.put('/upload/:table/:id', [
     check('table').custom(t => tables.allowedTable(t, tablesArray))
 ], controllerMethods.putFile)
-router.delete('upload/:table/:id', [
+router.delete('/upload/:table/:id', [
     check('table').custom(t => tables.allowedTable(t, tablesArray))
 ], controllerMethods.deleteFile)
 
