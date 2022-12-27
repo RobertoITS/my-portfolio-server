@@ -135,13 +135,24 @@ const deleteFile = async (req = request, res = response) => {
             console.log(imagePath);
             if(fs.existsSync(imagePath)) { //* If exist
                 fs.unlinkSync(imagePath) //* Deleted
-                return
+                res.status(200).json({
+                    ok:true,
+                    msg: 'deleted'
+                })
             }
         }
         else {
-            return
+            res.status(200).json({
+                ok:true,
+                msg: 'no picture found'
+            })
         }
-    } catch (err){ /** Do nothing */ }
+    } catch (err){
+        res.status(400).json({
+            ok:false,
+            msg: 'rejected'
+        })
+    }
 }
 
 export const methods = { postFile, putFile, getFile, deleteFile }
