@@ -1,73 +1,52 @@
 import { Router } from "express";
-import { methods as controllerMethods } from "../controllers/teammates.controller";
+import { methods as controllerMethods } from "../controllers/works.controller";
 
 const router = Router()
 
-//* Schema of teammates
+//* Schema of works
 /**
  * @openapi
  * components:
  *   schemas:
- *     teammates:
+ *     works:
  *       type: object
  *       properties:
  *         id: 
  *           type: int
  *           example: 55486
- *         link: 
+ *         title: 
  *           type: string
- *           example: https://my-host.com/portfolio
- *         facebook:
+ *           example: Object title
+ *         descrip:
  *           type: string
- *           example: http://facebook.com/my-facebook
- *         twitter:
+ *           example: This is a description of the object
+ *         url:
  *           type: string
- *           example: http://twitter.com/my-twitter
- *         instagram:
- *           type: string
- *           example: http://instagram.com/my-instagram
- *         linkedin:
- *           type: string
- *           example: http://linkedin.com/my-linkedin
- *         github: 
- *           type: string
- *           example: http://git-hub.com/my-git-hub
- *         name:
- *           type: string
- *           example: John
- *         profession:
- *           type: string
- *           example: Developer
- *         locate:
- *           type: string
- *           example: United States
+ *           example: http://object-url.com
  *         img_id:
  *           type: string
- *           string: fast-vc-2345.png
- *         last_name:
- *           type: string
- *           example: Millers
+ *           example: fast-vc-2345.png
  */
 
-//* Documentation for POST Teammate
+//* Documentation for POST Work
 /**
  * @openapi
- * /teammates:
+ * /works:
  *  post:
  *      summary:
  *          Add one record to the data base
  *      tags:
- *          - Teammates
+ *          - Works
  *      requestBody:
  *          description: All fields required
  *          required: true
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: "#/components/schemas/teammates"
+ *                      $ref: "#/components/schemas/works"
  *              application/x-www-form-urlencoded:
  *                      schema:
- *                          $ref: "#/components/schemas/teammates"
+ *                          $ref: "#/components/schemas/works"
  *      responses:
  *          201:
  *              description: Created
@@ -109,18 +88,18 @@ const router = Router()
  *                                  example: rejected
  */
 
-//* Documentation for GET all Teammates
+//* Documentation for GET all Works
 /**
  * @openapi
- * /teammates/:
+ * /works:
  *  get:
  *      summary:
- *          Get all the teammates from the DB
+ *          Get all the Works from the DB
  *      tags:
- *          - Teammates
+ *          - Works
  *      responses:
  *          200:
- *              description: Information of all the teammates
+ *              description: Information of all the works
  *              content:
  *                  application/json:
  *                      schema:
@@ -132,91 +111,37 @@ const router = Router()
  *                              result:
  *                                  type: array
  *                                  items:
- *                                      $ref: "#/components/schemas/teammates"
+ *                                      $ref: "#/components/schemas/works"
  *                              msg:
  *                                  type: string
  *                                  example: approved
- */
-
-//* Documentation for GET one Teammate
-/**
- * @openapi
- * /teammates/{last_name}:
- *  get:
- *      summary:
- *          Get one record from the data base
- *      tags:
- *          - Teammates
- *      parameters:
- *          - in: path
- *            name: last_name
- *            schema:
- *                type: string
- *            description: The last name of a Teammate
- *      responses:
- *          200:
- *              description: Information of one teammate
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              ok:
- *                                  type: boolean
- *                                  example: true
- *                              result:
- *                                  type: array
- *                                  items:
- *                                      $ref: "#/components/schemas/teammates"
- *                              msg:
- *                                  type: string
- *                                  example: approved
- *          400:
- *              description: ERROR
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              ok: 
- *                                  type: boolean
- *                                  example: false
- *                              e:
- *                                  type: object
- *                                  properties:
- *                                      error:
- *                                          type: string 
- *                                          example: "Some error message"
- *                              msg:
- *                                  type: string
- *                                  example: rejected
  */
 
 //* Documentation for PUT one Teammate
 /**
  * @openapi
- * /teammates/{id}:
+ * /work/{id}:
  *  put:
  *      summary:
  *          Edit one record to the data base
  *      tags:
- *          - Teammates
+ *          - Works
  *      parameters:
  *          - in: path
  *            name: id
  *            schema:
  *              type: number
- *            description: The ID of the teammate record
+ *            description: The ID of the work record
  *      requestBody:
  *          description: All fields required
  *          required: true
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: "#/components/schemas/teammates"
+ *                      $ref: "#/components/schemas/works"
  *              application/x-www-form-urlencoded:
  *                      schema:
- *                          $ref: "#/components/schemas/teammates"
+ *                          $ref: "#/components/schemas/works"
  *      responses:
  *          200:
  *              description: Edited
@@ -261,21 +186,21 @@ const router = Router()
 //* Documentation for DELETE one Teammate
 /**
  * @openapi
- * /teammates/{id}:
+ * /works/{id}:
  *  delete:
  *      summary:
  *          Delete one record from the data base
  *      tags:
- *          - Teammates
+ *          - Works
  *      parameters:
  *          - in: path
  *            name: id
  *            schema:
  *                type: number
- *            description: The ID of a Teammate
+ *            description: The ID of a Work
  *      responses:
  *          200:
- *              description: Information of one teammate
+ *              description: Information of one work
  *              content:
  *                  application/json:
  *                      schema:
@@ -314,13 +239,9 @@ const router = Router()
  *                                  example: rejected
  */
 
-
-//! CreateReadUpdateDelete petitions
-
-router.get('/teammates', controllerMethods.getAll)
-router.get('/teammates/:last_name', controllerMethods.getOne)
-router.post('/teammates', controllerMethods.postOne)
-router.delete('/teammates/:id', controllerMethods.deleteOne)
-router.put('/teammates/:id', controllerMethods.putOne)
+router.get('/works', controllerMethods.getAll)
+router.post('/works', controllerMethods.post)
+router.put('/works/:id', controllerMethods.put)
+router.delete('/works/:id', controllerMethods.deleteOne)
 
 export default router

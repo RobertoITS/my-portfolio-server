@@ -7,7 +7,7 @@ const options = {
         openapi: '3.0.0',
         info: { title: 'My Portfolio API', version: '1.0.0' },
     },
-    apis: [ 'src/routes/teammates.routes.js', 'src/routes/upload.file.routes.js' ]
+    apis: [ 'src/routes/teammates.routes.js', 'src/routes/upload.file.routes.js', 'src/routes/works.routes.js' ]
 }
 
 //Docs in JSON format

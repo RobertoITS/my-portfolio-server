@@ -1,6 +1,64 @@
 import { request, response } from "express";
 import { connect } from "../database/database";
 
+/**
+ * Status codes:
+ * 200 ok
+ * 201 created
+ * 204 no content (body)
+ * 304 not modify
+ * 400 bad request
+ * 404 not found
+ */
+
+/**
+ * @param {endpoints} http://localhost:3000/teammates // :last_name // :id
+ */
+
+//! Insert data
+/**
+ * 
+ * @param {request data: teammate data and image} req Object json()
+ * @param {any} res Sends message
+ * @returns The data inserted
+ * * In the form, insert an default image!
+ */
+const postOne = async (req = request, res = response) => { //! The reference key is "file"
+
+    //* Obtains other data from the body:
+    const teammate = {
+        link: req.body.link,
+        facebook: req.body.facebook,
+        twitter: req.body.twitter,
+        instagram: req.body.instagram,
+        linkedin: req.body.linkedin,
+        github: req.body.github,
+        name: req.body.name,
+        profession: req.body.profession,
+        locate: req.body.locate,
+        //img_id: '', //! Null value, send the image later (or not, depends of the user)
+        last_name: req.body.last_name
+    } //! Creates the object!
+    
+    try {
+        const connection = await connect
+        const result = await connection.query(/** insert! */ 'INSERT INTO teammates SET ?', teammate)
+        res.status(200).json({
+            ok:true,
+            result,
+            msg: 'approved'
+        })
+    }
+    catch (e) { //! If it has an error:
+        res.status(400).json({ //* Returns the error msg
+            ok:false,
+            e,
+            msg:'rejected'
+        })
+    }
+}
+
+
 //! Get all the data
 /**
  * 
@@ -54,54 +112,13 @@ const getOne = async(req =request, res = response) => {
     }
 }
 
-//! Insert data
+//! Delete data
 /**
  * 
- * @param {request data: teammate data and image} req Object json()
- * @param {any} res Sends message
- * @returns The data inserted
- * * In the form, insert an default image!
+ * @param { id } req string => ID of the teammate
+ * @param { json } res Object json
+ * @returns Object json => row change
  */
-const postOne = async (req = request, res = response) => { //! The reference key is "file"
-
-    //* Obtains other data from the body:
-    const teammate = {
-        link: req.body.link,
-        facebook: req.body.facebook,
-        twitter: req.body.twitter,
-        instagram: req.body.instagram,
-        linkedin: req.body.linkedin,
-        github: req.body.github,
-        name: req.body.name,
-        profession: req.body.profession,
-        locate: req.body.locate,
-        //img_id: '', //! Null value, send the image later (or not, depends of the user)
-        last_name: req.body.last_name
-    } //! Creates the object!
-    
-    try {
-        const connection = await connect
-        const result = await connection.query(/** insert! */ 'INSERT INTO teammates SET ?', teammate)
-        res.status(200).json({
-            ok:true,
-            result,
-            msg: 'approved'
-        })
-    }
-    catch (e) { //! If it has an error:
-        res.status(400).json({ //* Returns the error msg
-            ok:false,
-            e,
-            msg:'rejected'
-        })
-    }
-}
-
-//! Delete data
-//* La idea seria que la busqueda sea por el apellido, despues pasar el id, para que sea
-//* 100% segura!
-//* Poner en el sector de busqueda total (getAll), un boton de borrado (lista con boton), y cuando se clickee ahi,
-//* pase el id
 const deleteOne = async(req = request, res = response) => {
     const id = req.params.id
     try {
@@ -123,8 +140,11 @@ const deleteOne = async(req = request, res = response) => {
 }
 
 //! Edit teammate info
-//* Lo mismo que para borrar, la lista trae un boton, que pasa los datos obtenidos al body
-//* Se añadio el eliminar la imagen vieja
+/**
+ * 
+ * @param { id } req string => ID of the teammate
+ * @param { json } res Object json => Returns the row change
+ */
 const putOne = async(req = request, res = response) => {
 
     const id = req.params.id
@@ -140,7 +160,6 @@ const putOne = async(req = request, res = response) => {
         name: req.body.name,
         profession: req.body.profession,
         locate: req.body.locate,
-        //img_id: '',
         last_name: req.body.last_name
     } //! Creates the object!
 

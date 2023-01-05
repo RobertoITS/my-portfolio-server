@@ -25,7 +25,7 @@ const fs = require('fs') //* File system
  */
 
 /**
- * @param {endpoints} http://localhost:3000/'tabla'/'id'
+ * @param {endpoints} http://localhost:3000/'table'/'id'
  */
 
 //* Upload a file:
