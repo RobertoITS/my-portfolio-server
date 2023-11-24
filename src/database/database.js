@@ -1,8 +1,8 @@
+import mysql from 'promise-mysql'
 import config from './../config'
-import { Pool } from 'pg'
 
 //* Generate the connection
-const connection = new Pool({
+const connection = mysql.createConnection({
     host: config.host,
     port: config.port,
     database: config.database,
