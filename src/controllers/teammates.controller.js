@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { connect } from "../database/database";
+import { getConnection } from "../database/database";
 
 /**
  * Status codes:
@@ -41,7 +41,7 @@ const postOne = async (req = request, res = response) => { //! The reference key
     } //! Creates the object!
     
     try {
-        const connection = await connect
+        const connection = await getConnection()
         const result = await connection.query(/** insert! */ 'INSERT INTO teammates SET ?', teammate)
         res.status(200).json({
             ok:true,
@@ -67,7 +67,8 @@ const postOne = async (req = request, res = response) => { //! The reference key
  */
 const getAll = async(req = request, res = response) => {
     try {
-        const connection = await connect
+        console.log(getConnection());
+        const connection = await getConnection()
         const result = await connection.query('SELECT * FROM teammates')
         
         res.status(200).json({
@@ -78,6 +79,7 @@ const getAll = async(req = request, res = response) => {
         return result
     }
     catch (e) {
+        console.log(e);
         res.status(400).json({
             ok:false,
             e,
@@ -95,7 +97,7 @@ const getAll = async(req = request, res = response) => {
 const getOne = async(req =request, res = response) => {
     const last_name = req.params.last_name //* Obtains last name for search
     try {
-        const connection = await connect
+        const connection = await getConnection()
         const result = await connection.query('SELECT * FROM teammates WHERE last_name = ?', last_name)
         res.status(200).json({
             ok:true,
@@ -122,7 +124,7 @@ const getOne = async(req =request, res = response) => {
 const deleteOne = async(req = request, res = response) => {
     const id = req.params.id
     try {
-        const connection = await connect
+        const connection = await getConnection()
         const result = await connection.query('DELETE FROM teammates WHERE id = ?', id)
         res.status(200).json({
             ok:true,
@@ -164,7 +166,7 @@ const putOne = async(req = request, res = response) => {
     } //! Creates the object!
 
     try {
-        const connection = await connect
+        const connection = await getConnection()
 
         const result = await connection.query('UPDATE teammates SET ? WHERE id = ?', [teammate, id])
         res.status(200).json({
