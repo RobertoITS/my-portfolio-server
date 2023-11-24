@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 
 //* Settings
-app.set('port', 6666); //! The port
+app.set('port', 9090); //! The port
 app.use(express.urlencoded({ extended: false })) //! Parse application/x-www-form-urlencoded, basically can only parse incoming Request Object if strings or arrays
 app.use(express.json()) //! Return the petition as an object json
 
